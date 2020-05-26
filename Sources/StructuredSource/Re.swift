@@ -1,10 +1,33 @@
+// MIT License
+//
+// Copyright (c) 2016
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+// https://github.com/wl879/SwiftyRe
+
 //
 //  Re.swift
 //
 //  Created by Wang Liang on 2016/10/28.
 //  Copyright © 2016年 wl. All rights reserved.
 //
-// https://github.com/wl879/SwiftyRe
 
 import Foundation
 
@@ -18,18 +41,24 @@ public class Re {
         case ignoreSeparator
     }
 
-    public class Result:CustomStringConvertible  {
-        public let values:[String]
-        public let index:Int
+    public class Result: CustomStringConvertible, Equatable  {
+        public static func == (lhs: Re.Result, rhs: Re.Result) -> Bool {
+            lhs.index == rhs.index &&
+            lhs.lastIndex == rhs.lastIndex &&
+            lhs.values == rhs.values
+        }
+
+        public let values: [String]
+        public let index: Int
         public let lastIndex: Int
-        public let count:Int
+        public let count: Int
         public subscript (key: Int) -> String? {
             if key < self.values.count{
                 return self.values[key]
             }
             return nil
         }
-        init(index: Int, lastIndex: Int, values:[String]) {
+        init(index: Int, lastIndex: Int, values: [String]) {
             self.index  = index
             self.lastIndex = lastIndex
             self.values = values
@@ -43,8 +72,8 @@ public class Re {
 
     // MARK:
 
-    let regex    : NSRegularExpression
-    var flags    : Set<Character>
+    let regex: NSRegularExpression
+    var flags: Set<Character>
     var lastIndex: Int
 
     public init(_ pattern: String, _ flag: String = "") {
@@ -148,7 +177,7 @@ public class Re {
         return nil
     }
 
-    public func exec(_ input:String) -> Result? {
+    public func exec(_ input: String) -> Result? {
         if let res = self.match(input, offset: self.lastIndex, nonGlobal: true) {
             self.lastIndex = res.index + res.values[0].count
             return res

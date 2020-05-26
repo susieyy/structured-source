@@ -2,30 +2,35 @@ import Foundation
 
 // https://github.com/Constellation/structured-source/blob/master/src/structured-source.js
 
-public class StructuredSource {
-    public struct Position {
-        public var line: Int
-        public var column: Int
-    }
-    public struct Location {
-        public var start: Position
-        public var end: Position
-    }
+public struct OutOfRangeError: Error, Equatable { }
 
+public struct Position: Equatable {
+    public var line: Int
+    public var column: Int
+}
+
+public struct Location: Equatable {
+    public var start: Position
+    public var end: Position
+}
+
+public class StructuredSource {
     public var source: String
     public var indice: [Int]
 
-    public init(source: String) {
+    public init(_ source: String) {
         self.source = source
         self.indice = [ 0 ]
-        let regexp = Re("/[\r\n\u{2028}\u{2029}]/g")
-        let length = source.count
+        let regexp = Re("[\\r\\n\u{2028}\u{2029}]", "g")
+        let length = (source as NSString).length
         regexp.lastIndex = 0
         while true {
             guard let result = regexp.exec(source) else { break }
             var index = result.index
-            if source.charCodeAt(index: index) == 0x0D  /* '\r' */ &&
-                source.charCodeAt(index: index + 1) == 0x0A  /* '\n' */ {
+            let next = index + 1
+            if // Array(source).indices.contains(next) &&
+                source.charCodeAt(index: index) == 0x0D  /* '\r' */ &&
+                source.charCodeAt(index: next) == 0x0A  /* '\n' */ {
                 index += 1
             }
             let nextIndex = index + 1
@@ -39,30 +44,33 @@ public class StructuredSource {
         }
     }
 
-    public var lin: Int {
+    public var line: Int {
         indice.count
     }
 
-    public func locationToRange(loc: Location) -> Range<Int> {
-        positionToIndex(pos: loc.start)..<positionToIndex(pos: loc.end)
+    public func locationToRange(_ loc: Location) -> Result<Range<Int>, OutOfRangeError> {
+        guard case .success(let posStart) = positionToIndex(loc.start) else { return .failure(OutOfRangeError()) }
+        guard case .success(let posEnd) = positionToIndex(loc.end) else { return .failure(OutOfRangeError()) }
+        return .success(posStart..<posEnd)
     }
 
-    public func rangeToLocation(range: Range<Int>) -> Location {
-        Location(start: indexToPosition(index: range.startIndex), end: indexToPosition(index: range.endIndex))
+    public func rangeToLocation(_ range: Range<Int>) -> Location {
+        Location(start: indexToPosition(range.startIndex), end: indexToPosition(range.endIndex))
     }
 
-    public func positionToIndex(pos: Position) -> Int {
+    public func positionToIndex(_ pos: Position) -> Result<Int, OutOfRangeError> {
         // Line number starts with 1.
         // Column number starts with 0.
-        let start = self.indice[pos.line - 1]
-        return start + pos.column
+        let index = pos.line - 1
+        guard indice.indices.contains(index) else { return .failure(OutOfRangeError()) }
+        let start = indice[index]
+        return .success(start + pos.column)
     }
 
-    public func indexToPosition(index: Int) -> Position {
+    public func indexToPosition(_ index: Int) -> Position {
         let startLine = upperBound(indice, index)
         return Position(line: startLine, column: index - indice[startLine - 1])
     }
-
 }
 
 func upperBound<T: Comparable>(_ array: [T], _ value: T) -> Int {
