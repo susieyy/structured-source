@@ -78,11 +78,11 @@ func upperBound<T: Comparable>(_ array: [T], _ value: T) -> Int {
 }
 
 extension String {
-    public func charAt(index: Int) -> String {
+    func charAt(index: Int) -> String {
         return String(Array(self)[index])
     }
 
-    public func charCodeAt(index: Int) -> Int {
+    func charCodeAt(index: Int) -> Int {
         return Int((self as NSString).character(at: index))
     }
 }
