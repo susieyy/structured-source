@@ -3,7 +3,10 @@ import XCTest
 
 final class StructuredSourceTests: XCTestCase {
     func testStructuredSource() {
-        XCTContext.runActivity(named: "constructor") { _ in
+        // In swift test:
+        // Fatal error: XCTContext.runActivity(named:block:) failed because activities are disallowed in the current configuration
+
+        do { //XCTContext.runActivity(named: "constructor") { _ in
             do {
                 let src = StructuredSource("")
                 XCTAssertEqual(src.indice, [ 0 ])
@@ -37,7 +40,7 @@ final class StructuredSourceTests: XCTestCase {
             }
         }
 
-        XCTContext.runActivity(named: "positionToIndex") { _ in
+        do { // XCTContext.runActivity(named: "positionToIndex") { _ in
             let src = StructuredSource("aaa\u{2028}aaaa\u{2029}aaaaa\n")
             XCTAssertEqual(src.positionToIndex(Position(line: 1, column: 2)), Result<Int, OutOfRangeError>.success(2))
             XCTAssertEqual(src.positionToIndex(Position(line: 2, column: 2)), Result<Int, OutOfRangeError>.success(6))
@@ -48,7 +51,7 @@ final class StructuredSourceTests: XCTestCase {
             XCTAssertEqual((src.positionToIndex(Position(line: 5, column: 10))), Result<Int, OutOfRangeError>.failure(OutOfRangeError()))  // out of source line is calculated as NaN.
         }
 
-        XCTContext.runActivity(named: "indexToPosition") { _ in
+        do { // XCTContext.runActivity(named: "indexToPosition") { _ in
             do {
                 let src = StructuredSource("aaa\u{2028}aaaa\u{2029}aaaaa\n")
                 XCTAssertEqual(src.indexToPosition(2), Position(line: 1, column: 2))
@@ -67,7 +70,7 @@ final class StructuredSourceTests: XCTestCase {
             }
         }
 
-        XCTContext.runActivity(named: "rangeToLocation") { _ in
+        do { // XCTContext.runActivity(named: "rangeToLocation") { _ in
             do {
                 let src = StructuredSource("aaa\u{2028}aaaa\u{2029}aaaaa\n")
                 XCTAssertEqual(src.rangeToLocation(0..<2), Location(start: Position(line: 1, column: 0), end: Position(line: 1, column: 2)))
@@ -78,7 +81,7 @@ final class StructuredSourceTests: XCTestCase {
                 XCTAssertEqual(src.rangeToLocation(0..<2), Location(start: Position(line: 1, column: 0), end: Position(line: 1, column: 2)))
              }
         }
-        XCTContext.runActivity(named: "locationToRange") { _ in
+        do { // XCTContext.runActivity(named: "locationToRange") { _ in
             do {
                 let src = StructuredSource("aaa\u{2028}aaaa\u{2029}aaaaa\n")
                 XCTAssertEqual(src.locationToRange(Location(start: Position(line: 1, column: 0), end: Position(line: 1, column: 2))), Result<Range<Int>, OutOfRangeError>.success(0..<2))
