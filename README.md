@@ -26,7 +26,7 @@ XCTAssertEqual(src.indexToPosition(2), Position(line: 1, column: 2))
 XCTAssertEqual(src.rangeToLocation(0..<2), Location(start: Position(line: 1, column: 0), end: Position(line: 1, column: 2)))
 ```
 
-## None
+## Note
 
 - Line number starts with 1.
 - Column number starts with 0.
