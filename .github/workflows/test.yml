@@ -5,18 +5,12 @@ on:
 jobs:
   run:
     runs-on: macOS-latest
-    name: Xcode ${{ matrix.xcode }}
-    strategy:
-      matrix:
-        xcode: ["11"]
+    name: Swift test
     steps:
     - uses: actions/checkout@master
-    - name: Set Xcode
+    - name: Install tooling
       run: |
-        echo "Available Xcode versions:"
-        ls /Applications | grep Xcode
-        echo "Choosing Xcode_${{ matrix.xcode }}.app"
-        sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app
+        sudo xcode-select -s /Applications/Xcode_11.5.app
         xcodebuild -version
         swift --version
         swift package --version
