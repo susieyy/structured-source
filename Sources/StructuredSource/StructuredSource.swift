@@ -30,7 +30,7 @@ public class StructuredSource {
         self.source = source
         self.indice = [ 0 ]
         let regexp = Re("[\\r\\n\u{2028}\u{2029}]", "g")
-        let length = (source as NSString).length
+        let length = source.count
         regexp.lastIndex = 0
         while true {
             guard let result = regexp.exec(source) else { break }
