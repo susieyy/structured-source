@@ -95,16 +95,6 @@ final class StructuredSourceTests: XCTestCase {
         }
     }
 
-    func testRe() {
-        let str = "Hello, SwiftyRe. link: https://github.com/wl879/SwiftyRe"
-        XCTAssertEqual(["Hello", "SwiftyRe", "link", "https://github.com/wl879/SwiftyRe"], Re("[,.:] +").split(str))
-        XCTAssertEqual(["Hello", ", ", "SwiftyRe", ". ", "link", ": ", "https://github.com/wl879/SwiftyRe"], Re("[,.:] +").explode(str))
-        XCTAssertEqual(true, Re("https?:\\/\\/").test(str))
-        XCTAssertEqual(Re.Result(index: 5, lastIndex: 5, values: [","]), Re("\\W").match(str))
-        XCTAssertEqual(Re.Result(index: 5, lastIndex: 47, values: [",", " ", ".", " ", ":", " ", ":", "/", "/", ".", "/", "/"]), Re("\\W", "g").match(str))
-        XCTAssertEqual("Hello  SwiftyRe  link  https   github com wl879 SwiftyRe", Re("\\W", "g").replace(str, " "))
-    }
-
     func testUpperBound() {
         XCTAssertEqual(upperBound([ 0, 0, 2, 3, 4 ], -1), 0)
         XCTAssertEqual(upperBound([ 0, 0, 2, 3, 4 ], 0), 2)

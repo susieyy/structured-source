@@ -22,33 +22,35 @@ public struct Location: Equatable {
     }
 }
 
-public class StructuredSource {
+private let regex = NSRegularExpression("[\\r\\n\u{2028}\u{2029}]")
+
+public struct StructuredSource {
     public var source: String
     public var indice: [Int]
+    public var count: Int
 
     public init(_ source: String) {
         self.source = source
         self.indice = [ 0 ]
-        let regexp = Re("[\\r\\n\u{2028}\u{2029}]", "g")
-        let length = source.count
-        regexp.lastIndex = 0
-        while true {
-            guard let result = regexp.exec(source) else { break }
-            var index = result.index
+        let characters: [Character] = Array(source)
+        let length = characters.count
+        self.count = length
+
+        regex.matches(in: source, options: [], range: NSRange(location: 0, length: source.count)).forEach { (match: NSTextCheckingResult) in
+            var index = match.range.lowerBound
             let next = index + 1
-            if // Array(source).indices.contains(next) &&
-                source.charCodeAt(index: index) == 0x0D  /* '\r' */ &&
-                source.charCodeAt(index: next) == 0x0A  /* '\n' */ {
+
+            if length > next &&
+                characters[index].isNewline && //  == 0x0D  /* '\r' */ &&
+                characters[next].isNewline { // == 0x0A  /* '\n' */ {
                 index += 1
             }
-            let nextIndex = index + 1
             // If there's a last line terminator, we push it to the indice.
             // So use < instead of <=.
-            if length < nextIndex {
-                break
+            if length < next {
+                return
             }
-            indice.append(nextIndex)
-            regexp.lastIndex = nextIndex
+            indice.append(next)
         }
     }
 
@@ -83,14 +85,4 @@ public class StructuredSource {
 
 func upperBound<T: Comparable>(_ array: [T], _ value: T) -> Int {
     array.filter({ $0 <= value }).count
-}
-
-extension String {
-    func charAt(index: Int) -> String {
-        return String(Array(self)[index])
-    }
-
-    func charCodeAt(index: Int) -> Int {
-        return Int((self as NSString).character(at: index))
-    }
 }
