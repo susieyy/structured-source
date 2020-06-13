@@ -8,6 +8,8 @@ public struct Position: Equatable {
     public var line: Int
     public var column: Int
     public init(line: Int, column: Int) {
+        assert(line > 0, "Line should be more than 0")
+        assert(column >= 0, "column should be greater than 0")
         self.line = line
         self.column = column
     }
