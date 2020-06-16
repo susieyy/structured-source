@@ -4,7 +4,7 @@ import Foundation
 
 public struct OutOfRangeError: Error, Equatable { }
 
-public struct Position: Equatable {
+public struct Position: Equatable, Encodable {
     public var line: Int
     public var column: Int
     public init(line: Int, column: Int) {
@@ -15,7 +15,7 @@ public struct Position: Equatable {
     }
 }
 
-public struct Location: Equatable {
+public struct Location: Equatable, Encodable {
     public var start: Position
     public var end: Position
     public init(start: Position, end: Position) {
