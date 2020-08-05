@@ -1,5 +1,6 @@
 import XCTest
 @testable import StructuredSource
+import SwiftTestHelper
 
 final class StructuredSourceTests: XCTestCase {
     func testStructuredSource() {
@@ -92,6 +93,16 @@ final class StructuredSourceTests: XCTestCase {
                 let src = StructuredSource("")
                 XCTAssertEqual(src.locationToRange(Location(start: Position(line: 1, column: 0), end: Position(line: 1, column: 2))), Result<Range<Int>, OutOfRangeError>.success(0..<2))
             }
+        }
+    }
+
+    func testKokoro() throws {
+        let url = URL(forResource: "kokoro", type: "txt")
+        let text = try String(contentsOf: url)
+
+        measure {
+            let src = StructuredSource(text)
+            XCTAssertEqual(src.line, 1558)
         }
     }
 
