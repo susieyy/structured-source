@@ -96,6 +96,21 @@ final class StructuredSourceTests: XCTestCase {
         }
     }
 
+    func testLines() throws {
+        let url = URL(forResource: "kokoro", type: "txt")
+        let text = try String(contentsOf: url)
+
+//        do {
+//            let src = StructuredSource(text)
+//            dump(src.lines)
+//        }
+
+        measure {
+            let src = StructuredSource(text)
+            _ = src.lines
+        }
+    }
+
     func testKokoro() throws {
         let url = URL(forResource: "kokoro", type: "txt")
         let text = try String(contentsOf: url)
@@ -106,18 +121,13 @@ final class StructuredSourceTests: XCTestCase {
         }
     }
 
-    func testUpperBound() {
-        XCTAssertEqual(upperBound([ 0, 0, 2, 3, 4 ], -1), 0)
-        XCTAssertEqual(upperBound([ 0, 0, 2, 3, 4 ], 0), 2)
-        XCTAssertEqual(upperBound([ 0, 0, 2, 3, 4 ], 1), 2)
-        XCTAssertEqual(upperBound([ 0, 0, 2, 3, 4 ], 2), 3)
-        XCTAssertEqual(upperBound([ 0, 0, 2, 3, 4 ], 3), 4)
-        XCTAssertEqual(upperBound([ 0, 0, 2, 3, 4 ], 4), 5)
-        XCTAssertEqual(upperBound([ 0, 0, 2, 3, 4 ], 5), 5)
-    }
-
-    static var allTests = [
-        ("testUpperBound", testUpperBound),
-        ("testStructuredSource", testStructuredSource)
-    ]
+//    func testUpperBound() {
+//        XCTAssertEqual(upperBound([ 0, 0, 2, 3, 4 ], -1), 0)
+//        XCTAssertEqual(upperBound([ 0, 0, 2, 3, 4 ], 0), 2)
+//        XCTAssertEqual(upperBound([ 0, 0, 2, 3, 4 ], 1), 2)
+//        XCTAssertEqual(upperBound([ 0, 0, 2, 3, 4 ], 2), 3)
+//        XCTAssertEqual(upperBound([ 0, 0, 2, 3, 4 ], 3), 4)
+//        XCTAssertEqual(upperBound([ 0, 0, 2, 3, 4 ], 4), 5)
+//        XCTAssertEqual(upperBound([ 0, 0, 2, 3, 4 ], 5), 5)
+//    }
 }
