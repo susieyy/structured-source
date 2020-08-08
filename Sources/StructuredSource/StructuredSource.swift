@@ -80,6 +80,10 @@ public struct StructuredSource {
         }
     }
 
+    public func slice(_ range: Range<Int>) -> String {
+        String(characters[range])
+    }
+
     public func locationToRange(_ loc: Location) -> Result<Range<Int>, OutOfRangeError> {
         guard case .success(let posStart) = positionToIndex(loc.start) else { return .failure(OutOfRangeError()) }
         guard case .success(let posEnd) = positionToIndex(loc.end) else { return .failure(OutOfRangeError()) }
