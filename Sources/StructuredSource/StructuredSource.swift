@@ -8,14 +8,14 @@ public struct Position: Equatable, Encodable {
     public var line: Int
     public var column: Int
     public init(line: Int, column: Int) {
-        assert(line > 0, "Line should be more than 0")
-        assert(column >= 0, "column should be greater than 0")
+        assert(line == -1 || line > 0, "Line should be more than 0")
+        assert(line == -1 || column >= 0, "column should be greater than 0")
         self.line = line
         self.column = column
     }
 
-    public static var zero: Position {
-        Position(line: 0, column: 0)
+    public static var invalid: Position {
+        Position(line: -1, column: -1)
     }
 }
 
@@ -27,8 +27,8 @@ public struct Location: Equatable, Encodable {
         self.end = end
     }
 
-    public static var zero: Location {
-        Location(start: .zero, end: .zero)
+    public static var invalid: Location {
+        Location(start: .invalid, end: .invalid)
     }
 }
 
