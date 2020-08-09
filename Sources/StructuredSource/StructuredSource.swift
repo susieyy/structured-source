@@ -13,6 +13,10 @@ public struct Position: Equatable, Encodable {
         self.line = line
         self.column = column
     }
+
+    public static var zero: Position {
+        Position(line: 0, column: 0)
+    }
 }
 
 public struct Location: Equatable, Encodable {
@@ -22,11 +26,22 @@ public struct Location: Equatable, Encodable {
         self.start = start
         self.end = end
     }
+
+    public static var zero: Location {
+        Location(start: .zero, end: .zero)
+    }
 }
 
 private let regex = NSRegularExpression("[\\r\\n\u{2028}\u{2029}]")
 
-public struct StructuredSource {
+public struct StructuredSource: Equatable, Hashable {
+    public static func == (lhs: StructuredSource, rhs: StructuredSource) -> Bool {
+        lhs.source == rhs.source
+    }
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(source)
+    }
+
     public struct Line {
         public var text: String
         public var range: Range<Int>
@@ -35,6 +50,7 @@ public struct StructuredSource {
     public var source: String
     public var indice: [Int] { indiceAndNewLine.map { $0.0 }  }
     public var count: Int
+    public var isEmpty: Bool { source.isEmpty }
     private var indiceAndNewLine: [(Int, Character)]
     private var characters: [Character]
 
