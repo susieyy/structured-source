@@ -52,7 +52,7 @@ public struct StructuredSource: Equatable, Hashable {
     public var count: Int
     public var isEmpty: Bool { source.isEmpty }
     private var indiceAndNewLine: [(Int, Character)]
-    private var characters: [Character]
+    public var characters: [Character]
 
     public init(_ source: String) {
         self.source = source
