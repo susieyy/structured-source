@@ -11,7 +11,7 @@ Swift Package Manager
 Add the following to your Package.swift file's dependencies:
 
 ```swift
-.package(url: "https://github.com/susieyy/structured-source.git", from: "1.0.6"),
+.package(url: "https://github.com/susieyy/structured-source.git", from: "1.0.7"),
 ```
 
 ## Usage
