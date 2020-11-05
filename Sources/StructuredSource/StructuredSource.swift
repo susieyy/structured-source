@@ -2,9 +2,13 @@ import Foundation
 
 // https://github.com/Constellation/structured-source/blob/master/src/structured-source.js
 
-public struct OutOfRangeError: Error, Equatable { }
+public struct OutOfRangeError: Error, Equatable, CustomStringConvertible {
+    public var description: String {
+        "OutOfRangeError"
+    }
+}
 
-public struct Position: Equatable, Encodable {
+public struct Position: Equatable, Encodable, CustomStringConvertible {
     public var line: Int
     public var column: Int
     public init(line: Int, column: Int) {
@@ -17,9 +21,13 @@ public struct Position: Equatable, Encodable {
     public static var invalid: Position {
         Position(line: -1, column: -1)
     }
+
+    public var description: String {
+        "L\(line) C\(column)"
+    }
 }
 
-public struct Location: Equatable, Encodable {
+public struct Location: Equatable, Encodable, CustomStringConvertible {
     public var start: Position
     public var end: Position
     public init(start: Position, end: Position) {
@@ -29,6 +37,10 @@ public struct Location: Equatable, Encodable {
 
     public static var invalid: Location {
         Location(start: .invalid, end: .invalid)
+    }
+
+    public var description: String {
+        "START: \(start) END: \(end)"
     }
 }
 
