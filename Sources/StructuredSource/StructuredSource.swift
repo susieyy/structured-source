@@ -40,7 +40,9 @@ public struct Location: Equatable, Encodable, CustomStringConvertible {
     }
 
     public var description: String {
-        "START: \(start) END: \(end)"
+        start.line == -1 ?
+            "N/A" :
+            "L\(start.line)C\(start.column)-L\(end.line)C\(end.column)"
     }
 }
 
