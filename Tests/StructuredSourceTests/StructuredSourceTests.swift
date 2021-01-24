@@ -1,6 +1,5 @@
 import XCTest
 @testable import StructuredSource
-import SwiftTestHelper
 
 final class StructuredSourceTests: XCTestCase {
     func testStructuredSource() {

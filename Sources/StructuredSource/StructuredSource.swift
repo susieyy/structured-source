@@ -2,13 +2,13 @@ import Foundation
 
 // https://github.com/Constellation/structured-source/blob/master/src/structured-source.js
 
-public struct OutOfRangeError: Error, Equatable, CustomStringConvertible {
+public struct OutOfRangeError: Error, Hashable, Equatable, CustomStringConvertible {
     public var description: String {
         "OutOfRangeError"
     }
 }
 
-public struct Position: Equatable, Encodable, CustomStringConvertible {
+public struct Position: Hashable, Equatable, Encodable, CustomStringConvertible {
     public var line: Int
     public var column: Int
     public init(line: Int, column: Int) {
@@ -27,7 +27,7 @@ public struct Position: Equatable, Encodable, CustomStringConvertible {
     }
 }
 
-public struct Location: Equatable, Encodable, CustomStringConvertible {
+public struct Location: Hashable, Equatable, Encodable, CustomStringConvertible {
     public var start: Position
     public var end: Position
     public init(start: Position, end: Position) {
@@ -48,7 +48,7 @@ public struct Location: Equatable, Encodable, CustomStringConvertible {
 
 private let regex = NSRegularExpression("[\\r\\n\u{2028}\u{2029}]")
 
-public struct StructuredSource: Equatable, Hashable {
+public struct StructuredSource: Hashable, Equatable {
     public static func == (lhs: StructuredSource, rhs: StructuredSource) -> Bool {
         lhs.source == rhs.source
     }
@@ -56,7 +56,7 @@ public struct StructuredSource: Equatable, Hashable {
         hasher.combine(source)
     }
 
-    public struct Line {
+    public struct Line: Hashable, Equatable {
         public var text: String
         public var range: Range<Int>
         public var newLine: Character?
